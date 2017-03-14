@@ -16,7 +16,6 @@ rule all:
         expand(BASE + '/genotypes/GEUVADIS.chr{i}.PH1PH2_465.IMPFRQFILT_BIALLELIC_PH.annotv2.genotypes.vcf.gz',
             i = range(1, 23))
 
-
 rule get_rna:
     output:
         BASE + '/rna/{sample}/{sample}_1.fastq.gz',
@@ -43,3 +42,13 @@ rule get_genotypes:
         'find {BASE}/genotypes -name "*.gz" | xargs -I$ mv $ {BASE}/genotypes/'
         ' && '
         'rm -rf {BASE}/pub'
+
+rule md5:
+    output:
+        BASE + '/metadata/results.md5'
+    shell:
+        'cd {BASE}'
+        ' && '
+        'md5sum -c metadata/fastq.md5'
+        ' > '
+        '{output}'
